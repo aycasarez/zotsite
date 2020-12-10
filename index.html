@@ -1,0 +1,355 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Zotsite &mdash; Zotsite 0.3.4 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Usage" href="doc/usage.html" />
+    <link rel="prev" title="Zotsite" href="top.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="top.html" class="icon icon-home"> Zotsite
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#documentation">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#obtaining">Obtaining</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#process">Process</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sample-site-demonstration">Sample Site Demonstration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ubuntu-and-linux-systems-with-python-3-5-or-previous-version">Ubuntu and Linux Systems with Python 3.5 or Previous Version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#command-line-help">Command Line Help</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#attribution">Attribution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#screenshot">Screenshot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#todo">Todo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#zotero-plugin-listing">Zotero Plugin Listing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#changelog">Changelog</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#license">License</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="doc/usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contributing</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="top.html">Zotsite</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="top.html">Docs</a> &raquo;</li>
+        
+      <li>Zotsite</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/index.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="zotsite">
+<h1>Zotsite<a class="headerlink" href="#zotsite" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://travis-ci.org/plandes/zotsite"><img alt="Travis CI Build Status" src="https://travis-ci.org/plandes/zotsite.svg?branch=master" /></a>
+<a class="reference external" href="https://pypi.python.org/pypi/zensols.zotsite"><img alt="PyPI" src="https://img.shields.io/pypi/v/zensols.zotsite.svg" /></a>
+<a class="reference external" href="https://www.python.org/downloads/release/python-370"><img alt="Python 3.7" src="https://img.shields.io/badge/python-3.7-blue.svg" /></a>
+<a class="reference external" href="https://gitter.im/zoterosite/zotsite"><img alt="Gitter chat" src="https://badges.gitter.im/zoterosite/gitter.png" /></a></p>
+<p>This project exports your local <a class="reference external" href="https://www.zotero.org">Zotero</a> library to a usable HTML website.
+This generated website has the following features:</p>
+<ul class="simple">
+<li><p>Easily access your papers, site snapshots, notes from a navigation tree.</p></li>
+<li><p>Provides metadata from collections and attachments (i.e. referenes etc).</p></li>
+<li><p>Display PDF papers and website snapshot (the latter as framed).</p></li>
+<li><p>Search function dynamically narrows down the papers you’re looking for.</p></li>
+<li><p>Embed links to a specific collection, article, item, note etc.</p></li>
+<li><p>Export only a portion of your collection with regular expressions using the
+collection name.</p></li>
+<li><p><a class="reference external" href="https://github.com/retorquere/zotero-better-bibtex">BetterBibtex</a> integration.</p></li>
+<li><p>Snazzy look and feel from the latest <a class="reference external" href="https://getbootstrap.com">Bootstrap</a> CSS/Javascript library.</p></li>
+</ul>
+<div class="section" id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h2>
+<p>See the <a class="reference external" href="https://plandes.github.io/zotsite/index.html">full documentation</a>.</p>
+</div>
+<div class="section" id="obtaining">
+<h2>Obtaining<a class="headerlink" href="#obtaining" title="Permalink to this headline">¶</a></h2>
+<p>The easist way to install the command line program is via the <code class="docutils literal notranslate"><span class="pre">pip</span></code> installer:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip3 install zensols.zotsite
+</pre></div>
+</div>
+<p>Binaries are also available on <a class="reference external" href="https://pypi.org/project/zensols.zotsite/">pypi</a>.</p>
+</div>
+<div class="section" id="process">
+<h2>Process<a class="headerlink" href="#process" title="Permalink to this headline">¶</a></h2>
+<p>The tool does the following:</p>
+<ol class="simple">
+<li><p>Exports the meta data (directory structure, references, notes, etc) from
+your <a class="reference external" href="https://www.zotero.org">Zotero</a> library.  On MacOS, this is done by querying the file system
+SQLite DB files.</p></li>
+<li><p>Copies a static site that enables traversal of the exported data.</p></li>
+<li><p>Copies your <a class="reference external" href="https://www.zotero.org">Zotero</a> stored papers, snapshot (sites) etc.</p></li>
+<li><p>Generates a navigation tree to easily find your papers/content.</p></li>
+</ol>
+</div>
+<div class="section" id="sample-site-demonstration">
+<h2>Sample Site Demonstration<a class="headerlink" href="#sample-site-demonstration" title="Permalink to this headline">¶</a></h2>
+<p>See the <a class="reference external" href="https://plandes.github.io/zotsite/demo/index.html">live demo</a>, which provides a variety of resources found in my own
+library.  <em>Note:</em> To my knowledge, all of these resources are free to
+distribute and violate no laws.  If I’ve missed one,
+please <a class="reference internal" href="CONTRIBUTING.html"><span class="doc">create an issue</span></a>.</p>
+</div>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>The command line program has two modes: show configuration (a good first step)
+and to create the web site.  You can see what the program is parsing from your
+<a class="reference external" href="https://www.zotero.org">Zotero</a> library:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zotsite print
+</pre></div>
+</div>
+<p>To create the stand-alone site, run the program (without the angle brackets):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zotsite <span class="nb">export</span> -o &lt;sitedir&gt;
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="doc/usage.html"><span class="doc">usage</span></a> for more information.</p>
+</div>
+<div class="section" id="ubuntu-and-linux-systems-with-python-3-5-or-previous-version">
+<h2>Ubuntu and Linux Systems with Python 3.5 or Previous Version<a class="headerlink" href="#ubuntu-and-linux-systems-with-python-3-5-or-previous-version" title="Permalink to this headline">¶</a></h2>
+<p>Please <a class="reference external" href="https://github.com/plandes/zotsite/issues/4">read this issue</a> if you
+are installing a Ubuntu or any Linux system with Python 3.5 or previous
+version.</p>
+</div>
+<div class="section" id="command-line-help">
+<h2>Command Line Help<a class="headerlink" href="#command-line-help" title="Permalink to this headline">¶</a></h2>
+<p>Command line usage as provided with the <code class="docutils literal notranslate"><span class="pre">--help</span></code> option:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">Usage</span><span class="p">:</span> <span class="n">zotsite</span> <span class="o">&lt;</span><span class="n">list</span><span class="o">|</span><span class="n">export</span><span class="o">|</span><span class="n">print</span><span class="o">|</span><span class="n">tmp</span><span class="o">&gt;</span> <span class="p">[</span><span class="k">options</span><span class="p">]</span>
+
+<span class="k">Options</span><span class="p">:</span>
+<span class="c1">--version             show program&#39;s version number and exit</span>
+<span class="o">-</span><span class="n">h</span><span class="p">,</span> <span class="c1">--help            show this help message and exit</span>
+<span class="o">-</span><span class="n">w</span> <span class="nb">NUMBER</span><span class="p">,</span> <span class="c1">--whine=NUMBER</span>
+<span class="k">add</span> <span class="n">verbosity</span> <span class="k">to</span> <span class="n">logging</span>
+<span class="o">-</span><span class="k">c</span> <span class="n">FILE</span><span class="p">,</span> <span class="c1">--config=FILE</span>
+<span class="n">configuration</span> <span class="n">file</span>
+<span class="n">Actions</span><span class="p">:</span>
+<span class="n">export</span>  <span class="n">Export</span>
+<span class="o">-</span><span class="n">o</span><span class="p">,</span> <span class="c1">--outputdir &lt;string&gt;  ./zotsite  the directory to output the website</span>
+<span class="c1">--collection &lt;string&gt;                regular expression pattern to match collections</span>
+
+<span class="n">print</span>   <span class="n">Print</span> <span class="k">structure</span>
+<span class="c1">--collection &lt;string&gt;                regular expression pattern to match collections</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="attribution">
+<h2>Attribution<a class="headerlink" href="#attribution" title="Permalink to this headline">¶</a></h2>
+<p>This software uses:</p>
+<ul class="simple">
+<li><p>Python 3</p></li>
+<li><p><a class="reference external" href="https://getbootstrap.com">Bootstrap</a> version 4</p></li>
+<li><p><a class="reference external" href="https://github.com/jonmiles/bootstrap-treeview">Tree View</a> for Bootstrap</p></li>
+<li><p><a class="reference external" href="https://popper.js.org">Popper</a> for tooltips</p></li>
+<li><p><a class="reference external" href="https://ourcodeworld.com/articles/read/143/how-to-copy-text-to-clipboard-with-javascript-easily">Copy to Clipboard</a> function</p></li>
+</ul>
+</div>
+<div class="section" id="screenshot">
+<h2>Screenshot<a class="headerlink" href="#screenshot" title="Permalink to this headline">¶</a></h2>
+<p>Also see the <a class="reference external" href="https://plandes.github.io/zotsite/demo/index.html">live demo</a>.</p>
+<p><img alt="Screenshot" src="doc/snapshot.png?raw=true" /></p>
+</div>
+<div class="section" id="todo">
+<h2>Todo<a class="headerlink" href="#todo" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Make the site portion a proper Javascript site.  Right now, all the <code class="docutils literal notranslate"><span class="pre">min</span></code>s
+are added in the distribution to same directory as
+the <a class="reference external" href="src/site/js/zotero.js">main navigation/content</a> file.</p></li>
+<li><p>Add functionality to the disabled <em>View</em> button that drills down in a paper
+and finds a PDF or site to view withouth the user having to do this.</p></li>
+<li><p>Use something like zotxt to make this work with a plugin rather than directly
+against the SQLite DB.</p></li>
+</ul>
+</div>
+<div class="section" id="zotero-plugin-listing">
+<h2>Zotero Plugin Listing<a class="headerlink" href="#zotero-plugin-listing" title="Permalink to this headline">¶</a></h2>
+<p>This is listed as a <a class="reference external" href="https://www.zotero.org/support/plugins#website_integration">plugin</a> on the Zotero site.</p>
+</div>
+<div class="section" id="changelog">
+<h2>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h2>
+<p>An extensive changelog is available <a class="reference internal" href="CHANGELOG.html"><span class="doc">here</span></a>.</p>
+</div>
+<div class="section" id="license">
+<h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="LICENSE.html"><span class="doc">MIT License</span></a></p>
+<p>Copyright (c) 2020 Paul Landes</p>
+<!-- links --></div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="doc/usage.html" class="btn btn-neutral float-right" title="Usage" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="top.html" class="btn btn-neutral float-left" title="Zotsite" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Paul Landes
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

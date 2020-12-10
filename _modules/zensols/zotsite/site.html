@@ -1,0 +1,360 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>zensols.zotsite.site &mdash; Zotsite 0.3.4 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../top.html" class="icon icon-home"> Zotsite
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../doc/usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../CONTRIBUTING.html">Contributing</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../top.html">Zotsite</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../top.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>zensols.zotsite.site</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for zensols.zotsite.site</h1><div class="highlight"><pre>
+<span></span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">from</span> <span class="nn">zensols.persist</span> <span class="k">import</span> <span class="n">persisted</span>
+<span class="kn">from</span> <span class="nn">zensols.zotsite</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">AppConfig</span><span class="p">,</span>
+    <span class="n">DatabaseReader</span><span class="p">,</span>
+    <span class="n">NavCreateVisitor</span><span class="p">,</span>
+    <span class="n">RegexItemMapper</span><span class="p">,</span>
+    <span class="n">IdItemMapper</span><span class="p">,</span>
+    <span class="n">FileSystemCopyVisitor</span><span class="p">,</span>
+    <span class="n">PruneVisitor</span><span class="p">,</span>
+    <span class="n">Library</span><span class="p">,</span>
+    <span class="n">PrintVisitor</span><span class="p">,</span>
+    <span class="n">Walker</span><span class="p">,</span>
+    <span class="n">BetterBibtexVisitor</span><span class="p">,</span>
+    <span class="c1"># not used as literals, but imported to bind to the module namespace</span>
+    <span class="n">UnsortedWalker</span><span class="p">,</span>
+    <span class="n">SortedWalker</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="SiteCreator"><a class="viewcode-back" href="../../../api/zensols.zotsite.html#zensols.zotsite.site.SiteCreator">[docs]</a><span class="k">class</span> <span class="nc">SiteCreator</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create the Zotero content web site.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="SiteCreator.__init__"><a class="viewcode-back" href="../../../api/zensols.zotsite.html#zensols.zotsite.site.SiteCreator.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">AppConfig</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">cnf</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">populate</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db</span> <span class="o">=</span> <span class="n">DatabaseReader</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">data_dir</span><span class="p">,</span> <span class="n">library_id</span><span class="o">=</span><span class="n">cnf</span><span class="o">.</span><span class="n">library_id</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sort</span> <span class="o">=</span> <span class="n">cnf</span><span class="o">.</span><span class="n">sort</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out_dir</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_option_path</span><span class="p">(</span><span class="s1">&#39;out_dir&#39;</span><span class="p">,</span> <span class="n">expect</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">config</span></div>
+
+    <span class="nd">@property</span>
+    <span class="nd">@persisted</span><span class="p">(</span><span class="s1">&#39;_walker&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">walker</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Walker</span><span class="p">:</span>
+        <span class="n">walker</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;none&#39;</span><span class="p">:</span> <span class="s1">&#39;UnsortedWalker&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;case&#39;</span><span class="p">:</span> <span class="s1">&#39;SortedWalker&#39;</span><span class="p">}</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sort</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">walker</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;unknown sort type: &quot;</span><span class="si">{self.sort}</span><span class="s1">&quot;&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">globals</span><span class="p">()[</span><span class="n">walker</span><span class="p">]()</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@persisted</span><span class="p">(</span><span class="s1">&#39;_library&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">library</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Library</span><span class="p">:</span>
+        <span class="n">lib</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">get_library</span><span class="p">()</span>
+        <span class="n">name_pat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="s1">&#39;name_pat&#39;</span><span class="p">,</span> <span class="n">expect</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">name_pat</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;filtering on </span><span class="se">\&#39;</span><span class="si">{name_pat}</span><span class="se">\&#39;</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">match_children</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_option_boolean</span><span class="p">(</span>
+                <span class="s1">&#39;match_children&#39;</span><span class="p">,</span> <span class="n">expect</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">visitor</span> <span class="o">=</span> <span class="n">PruneVisitor</span><span class="p">(</span><span class="n">name_pat</span><span class="p">,</span> <span class="n">match_children</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">walker</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="n">visitor</span><span class="p">)</span>
+        <span class="n">id_mapping</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="s1">&#39;id_mapping&#39;</span><span class="p">,</span> <span class="n">expect</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">id_mapping</span> <span class="o">==</span> <span class="s1">&#39;none&#39;</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">id_mapping</span> <span class="o">==</span> <span class="s1">&#39;betterbib&#39;</span><span class="p">:</span>
+            <span class="n">visitor</span> <span class="o">=</span> <span class="n">BetterBibtexVisitor</span><span class="p">(</span><span class="n">lib</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">walker</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="n">visitor</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;unknown ID mapping: </span><span class="si">{id_mapping}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">lib</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@persisted</span><span class="p">(</span><span class="s1">&#39;_itemmapper&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">itemmapper</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="s1">&#39;file_mapping&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;long&#39;</span><span class="p">:</span>
+            <span class="n">mapper</span> <span class="o">=</span> <span class="n">RegexItemMapper</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">library</span><span class="p">,</span> <span class="s1">&#39;.*\.pdf$&#39;</span><span class="p">,</span> <span class="s1">&#39;[ ]&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;item&#39;</span><span class="p">:</span>
+            <span class="n">mapper</span> <span class="o">=</span> <span class="n">IdItemMapper</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">library</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;unknown file mapping: </span><span class="si">{name}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">mapper</span>
+
+<div class="viewcode-block" id="SiteCreator.print_structure"><a class="viewcode-back" href="../../../api/zensols.zotsite.html#zensols.zotsite.site.SiteCreator.print_structure">[docs]</a>    <span class="k">def</span> <span class="nf">print_structure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Print (sub)collections and papers in those collections as a tree.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">walker</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">library</span><span class="p">,</span> <span class="n">PrintVisitor</span><span class="p">())</span></div>
+
+    <span class="k">def</span> <span class="nf">_write_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Write version and other metadata to the website, which is used during</span>
+<span class="sd">        rending of the site.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="s1">&#39;pkg&#39;</span><span class="p">):</span>
+            <span class="n">pkg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">pkg</span>
+            <span class="n">meta</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;version&#39;</span><span class="p">:</span> <span class="n">pkg</span><span class="o">.</span><span class="n">version</span><span class="p">,</span>
+                    <span class="s1">&#39;project_name&#39;</span><span class="p">:</span> <span class="n">pkg</span><span class="o">.</span><span class="n">project_name</span><span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">meta</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;version&#39;</span><span class="p">:</span> <span class="s1">&#39;&lt;none&gt;&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;project_name&#39;</span><span class="p">:</span> <span class="s1">&#39;&lt;none&gt;&#39;</span><span class="p">}</span>
+        <span class="n">js</span> <span class="o">=</span> <span class="s1">&#39;var zoteroMeta = </span><span class="si">{}</span><span class="s1">;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">meta</span><span class="p">))</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">js</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_create_tree_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create the table of contents/tree info used by the navigation widget.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">itemmapper</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">itemmapper</span>
+        <span class="n">js_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_dir</span> <span class="o">/</span> <span class="s1">&#39;js&#39;</span>
+        <span class="n">nav_file</span> <span class="o">=</span> <span class="n">js_dir</span> <span class="o">/</span> <span class="s1">&#39;zotero-tree-data.js&#39;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;creating js nav tree: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nav_file</span><span class="p">))</span>
+        <span class="n">visitor</span> <span class="o">=</span> <span class="n">NavCreateVisitor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">library</span><span class="p">,</span> <span class="n">itemmapper</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">walker</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">library</span><span class="p">,</span> <span class="n">visitor</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">nav_file</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;var tree =</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">visitor</span><span class="o">.</span><span class="n">primary_roots</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+        <span class="n">meta_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">js_dir</span><span class="p">,</span> <span class="s1">&#39;zotero-meta.js&#39;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;creating js metadata: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">meta_file</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_write_meta</span><span class="p">(</span><span class="n">meta_file</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_copy_storage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Copy the storage contents, which is the location of the PDF (and other)</span>
+<span class="sd">        documents that will be rendered in the site GUI.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dst</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_dir</span>
+        <span class="n">fsvisitor</span> <span class="o">=</span> <span class="n">FileSystemCopyVisitor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">library</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">itemmapper</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;copying storage to </span><span class="si">{dst}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">walker</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">library</span><span class="p">,</span> <span class="n">fsvisitor</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_copy_static_res</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">src</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">dst</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Copy static resources from the distribution package.</span>
+
+<span class="sd">        :param src: the source package directory</span>
+<span class="sd">        :param dst: the destination on the file system</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;copy: </span><span class="si">{src}</span><span class="s1"> -&gt; </span><span class="si">{dst}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">))</span>
+        <span class="n">dst</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">src</span><span class="o">.</span><span class="n">iterdir</span><span class="p">():</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">src_file</span> <span class="o">=</span> <span class="n">src</span> <span class="o">/</span> <span class="n">res</span>
+            <span class="n">dst_file</span> <span class="o">=</span> <span class="n">dst</span> <span class="o">/</span> <span class="n">res</span>
+            <span class="k">if</span> <span class="n">src_file</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_copy_static_res</span><span class="p">(</span><span class="n">src_file</span><span class="p">,</span> <span class="n">dst_file</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;copy: </span><span class="si">{src_file}</span><span class="s1"> -&gt; </span><span class="si">{dst_file}</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="n">src_file</span><span class="p">,</span> <span class="n">dst_file</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_copy_static</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;copying static data -&gt; </span><span class="si">{self.out_dir}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">src</span> <span class="ow">in</span> <span class="s1">&#39;src lib&#39;</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
+            <span class="n">res_path</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;resources/</span><span class="si">{src}</span><span class="s1">&#39;</span>
+            <span class="n">src_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="n">res_path</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">src_dir</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+                <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;missing resource directory </span><span class="si">{res_path}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_copy_static_res</span><span class="p">(</span><span class="n">src_dir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_dir</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SiteCreator.export"><a class="viewcode-back" href="../../../api/zensols.zotsite.html#zensols.zotsite.site.SiteCreator.export">[docs]</a>    <span class="k">def</span> <span class="nf">export</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Entry point method to export (create) the website.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_copy_static</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_create_tree_data</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_copy_storage</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SiteCreator.tmp"><a class="viewcode-back" href="../../../api/zensols.zotsite.html#zensols.zotsite.site.SiteCreator.tmp">[docs]</a>    <span class="k">def</span> <span class="nf">tmp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">print_structure</span><span class="p">()</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Paul Landes
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
